@@ -1,13 +1,12 @@
 #! /usr/bin/env node
 'use strict'
 
-const {join} = require('path')
+const {resolve, dirname} = require('path')
+const {runInNewContext} = require('vm')
 const {readFileSync} = require('fs')
-const process = require('process')
+const {exit, argv, cwd} = require('process')
 const getStdIn = require('get-stdin')
-const TempFile = require('./lib/temp-file.js')
 const {stringify} = JSON
-const {exit, argv, cwd} = process
 const {info, error} = global.console
 
 const success = message => {
@@ -20,22 +19,46 @@ const failure = (message, code = 1) => {
   exit(code)
 }
 
-const main = filename =>
-  stringify(require(String(filename)), undefined, 2)
+const reqfn = (dirname = cwd()) => name => {
+  const string = String(name)
+  return require(string.slice(2) === './' ? resolve(dirname, string) : string)
+}
+
+const main = (code, context) =>
+  stringify(runInNewContext(code, context), undefined, 2)
 
 const filename = argv[2]
-if (filename) success(main(join(cwd(), filename)))
+if (filename) {
+  const file = resolve(cwd(), filename)
+  const dir = dirname(file)
+  success(
+    main(
+      readFileSync(file, 'utf8'),
+      {
+        require: reqfn(dir),
+        __dirname: dir,
+        __filename: file
+      }
+    )
+  )
+}
 
 getStdIn()
   .then(
     value => {
       const string = String(value)
-      if (!string) return failure(readFileSync(join(__dirname, 'help.txt'), 'utf8'), 0)
-      const tmp = new TempFile({directory: __dirname})
-      tmp.write(string)
-      const result = main(tmp)
-      tmp.unlink()
-      return success(result)
+      if (!string) return failure(readFileSync(resolve(__dirname, 'help.txt'), 'utf8'), 0)
+      const dir = cwd()
+      return success(
+        main(
+          string,
+          {
+            require: reqfn(dir),
+            __dirname: dir,
+            __filename: undefined
+          }
+        )
+      )
     }
   )
   .catch(failure)
