@@ -1,7 +1,7 @@
-require-to-json — Require a JavaScript file and print JSON result to stdout
+eval-to-json — Evaluate a JavaScript expression and print JSON output
 
 Usage:
-  $ require-to-json file.js
-  $ require-to-json < file.js
-  $ cat file.js | require-to-json
-  $ echo 'module.exports = 123 + 456' | require-to-json
+  $ eval-to-json file.js
+  $ eval-to-json < file.js
+  $ cat file.js | eval-to-json
+  $ echo '9 * 87 * 654 * 3210' | eval-to-json

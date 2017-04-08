@@ -1,20 +1,20 @@
-# require-to-json
-Require a JavaScript file and print JSON result to stdout
+# eval-to-json
+Evaluate a JavaScript expression and print JSON output
 
 ## Installation
 
 ```
-npm install --global require-to-json
+npm install --global eval-to-json
 ```
 
 ## Command-line usage
 
 ```bash
-require-to-json file.js
+eval-to-json file.js
 ```
 
 ```bash
-require-to-json < file.js
+eval-to-json < file.js
 ```
 
 ```bash
@@ -22,5 +22,5 @@ cat file.js | require-to-json
 ```
 
 ```bash
-echo 'module.exports = 123 + 456' | require-to-json
+echo '9 * 87 * 654 * 3210' | eval-to-json
 ```
