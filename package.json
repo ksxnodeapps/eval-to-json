@@ -1,7 +1,7 @@
 {
   "name": "eval-to-json",
   "description": "Evaluate a JavaScript expression and print JSON output",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "bin": "index.js",
   "preferGlobal": true,
   "author": "Hoàng Văn Khải <hvksmr1996@gmail.com>",
