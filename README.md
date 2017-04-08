@@ -3,7 +3,7 @@ Evaluate a JavaScript expression and print JSON output
 
 ## Installation
 
-```
+```bash
 npm install --global eval-to-json
 ```
 
